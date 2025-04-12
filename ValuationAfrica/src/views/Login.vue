@@ -10,7 +10,7 @@
         </p>
       </div>
       
-      <!-- Simple error message -->
+      <!-- error message -->
       <div v-if="store.error" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
         {{ store.error }}
       </div>
@@ -72,13 +72,11 @@ export default {
     const email = ref('')
     const password = ref('')
     
-    // Get router and store
+
     const router = useRouter()
     const store = useMainStore()
     
-    // Handle login
     const handleLogin = async () => {
-      // Try to login
       const success = await store.login(email.value, password.value)
       
       if (success) {

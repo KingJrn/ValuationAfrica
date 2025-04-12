@@ -1,19 +1,17 @@
 import { defineStore } from 'pinia'
 
-// Single store for the entire application
 export const useMainStore = defineStore('main', {
   state: () => ({
     // Auth states
     token: localStorage.getItem('token') || null,
     user: JSON.parse(localStorage.getItem('user')) || null,
     
-    // Properties states
     properties: [],
     loading: false,
     error: null,
     
     // UI states
-    viewMode: 'card', // 'card' or 'list'
+    viewMode: 'card', 
     searchQuery: '',
     filterValue: ''
   }),
@@ -25,7 +23,6 @@ export const useMainStore = defineStore('main', {
         this.loading = true
         this.error = null
         
-        // Use fetch API for login
         const response = await fetch('https://staging.valuationsafrica.mw/api/v1/login', {
           method: 'POST',
           headers: {
@@ -52,7 +49,7 @@ export const useMainStore = defineStore('main', {
         return true
       } catch (error) {
         console.error('Login failed:', error)
-        this.error = 'Login failed. Please check your credentials.'
+        this.error = `Login failed. ${response}`
         this.loading = false
         return false
       }
@@ -112,9 +109,8 @@ export const useMainStore = defineStore('main', {
         )
       }
       
-      // Apply additional filter if filter value exists
+      // Filter by listing type (Rent, Sale)
       if (state.filterValue) {
-        // Filter by listing type (Rent, Sale)
         result = result.filter(property => 
           property.listing_type === state.filterValue
         )
@@ -123,7 +119,7 @@ export const useMainStore = defineStore('main', {
       return result
     },
     
-    // Get unique listing types for filter dropdown
+    // Get listing types for filter dropdown
     propertyListingTypes: (state) => {
       const types = new Set()
       state.properties.forEach(property => {
